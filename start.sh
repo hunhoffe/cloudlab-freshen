@@ -234,6 +234,10 @@ prepare_for_openwhisk() {
             printf "%s: %s\n" "$(date +"%T.%N")" "Updated dockerrootdir to /mydata/docker/containers in $INSTALL_DIR/openwhisk-deploy-kube/helm/openwhisk/templates/_invoker-helpers.tpl"
         fi
     fi
+    
+    # Use correct version of openwhisk-deploy-kube
+    cd $INSTALL_DIR/openwhisk-deploy-kube
+    git checkout 8a7bb7c278a0568d17457548a820bba6cb60f795
 }
 
 deploy_openwhisk() {
