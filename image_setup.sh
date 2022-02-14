@@ -84,8 +84,9 @@ sudo chmod -R o+rw $INSTALL_DIR
 cd $INSTALL_DIR
 git clone https://github.com/apache/openwhisk-deploy-kube openwhisk-deploy-kube
 cd openwhisk-deploy-kube
-git checkout 8a7bb7c278a0568d17457548a820bba6cb60f795
+git checkout 688475483935c3a6db28127df1dff2bd735dfc25
 
+# Download private openwhisk clone & set up branches to track remote branches
 cd $INSTALL_DIR
 git clone git@github.com:hunhoffe/openwhisk-freshen.git openwhisk
 cd openwhisk
