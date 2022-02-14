@@ -58,7 +58,12 @@ pc.defineParameter("schedulerEnabled",
                    portal.ParameterType.BOOLEAN,
                    False,
                    longDescription="Enables the OpenWhisk scheduler component (and etcd). By default, this is enabled.")
-# Below option copy/pasted directly from small-lan experiment on CloudLab
+pc.defineParameter("openWhiskVersion",
+                   "OpenWhisk Version",
+                   portal.ParameterType.STRING,
+                   'base',
+                   legalValues=[('base', 'Default OpenWhisk'), ('predict', 'OpenWhisk + Prediction')]
+                   longDescription="Version of OpenWhisk controller/invoker to use.")
 # Optional ephemeral blockstore
 pc.defineParameter("tempFileSystemSize", 
                    "Temporary Filesystem Size",
@@ -116,8 +121,7 @@ for i, node in enumerate(nodes[1:]):
       BASE_IP, i + 2, params.startKubernetes)))
 
 # Start primary node
-nodes[0].addService(rspec.Execute(shell="bash", command="/local/repository/start.sh primary {}.1 {} {} {} {} {} {} > /home/cloudlab-openwhisk/start.log 2>&1".format(
-  BASE_IP, params.nodeCount, params.startKubernetes, params.deployOpenWhisk, params.numInvokers, params.invokerEngine, params.schedulerEnabled)))
-
+nodes[0].addService(rspec.Execute(shell="bash", command="/local/repository/start.sh primary {}.1 {} {} {} {} {} {} {} > /home/cloudlab-openwhisk/start.log 2>&1".format(
+  BASE_IP, params.nodeCount, params.startKubernetes, params.deployOpenWhisk, params.numInvokers, params.invokerEngine, params.schedulerEnabled, params.openWhiskVersion)))
 
 pc.printRequestRSpec()
