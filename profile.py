@@ -62,7 +62,7 @@ pc.defineParameter("openWhiskVersion",
                    "OpenWhisk Version",
                    portal.ParameterType.STRING,
                    'base',
-                   legalValues=[('base', 'Default OpenWhisk'), ('predict', 'OpenWhisk + Prediction')]
+                   legalValues=[('base', 'Default OpenWhisk'), ('predict', 'OpenWhisk + Prediction')],
                    longDescription="Version of OpenWhisk controller/invoker to use.")
 # Optional ephemeral blockstore
 pc.defineParameter("tempFileSystemSize", 
