@@ -1,9 +1,9 @@
 """ Ubuntu 20.04 Optional Kubernetes Cluster w/ OpenWhisk optionally deployed with a parameterized
-number of nodes.
+number of nodes. Used for the freshen research project.
 
 Instructions:
 Note: It can take upwards of 10 min. for the cluster to fully initialize. Thank you for your patience!
-For full documentation, see the GitHub repo: https://github.com/CU-BISON-LAB/cloudlab-openwhisk
+For full documentation, see the GitHub repo: https://github.com/hunhoffe/cloudlab-openwhisk
 Output from the startup script is found at /home/openwhisk-kubernetes/start.log on all nodes
 """
 
