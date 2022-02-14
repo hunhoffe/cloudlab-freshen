@@ -197,10 +197,6 @@ prepare_for_openwhisk() {
         exit 1
     fi
     printf "%s: %s\n" "$(date +"%T.%N")" "Created openwhisk namespace in Kubernetes."
-
-    # Use specific commit for research project
-    cd $INSTALL_DIR/openwhisk-deploy-kube
-    git checkout 688475483935c3a6db28127df1dff2bd735dfc25
     
     # Set up mycluster.yaml w/ permissions
     cp /local/repository/mycluster.yaml $INSTALL_DIR/openwhisk-deploy-kube/mycluster.yaml
@@ -219,7 +215,6 @@ prepare_for_openwhisk() {
         fi
     fi
 }
-
 
 deploy_openwhisk() {
     # Takes cluster IP as argument to set up wskprops files.
