@@ -7,8 +7,8 @@ INSTALL_DIR=/home/cloudlab-openwhisk
 NUM_MIN_ARGS=3
 PRIMARY_ARG="primary"
 SECONDARY_ARG="secondary"
-USAGE=$'Usage:\n\t./start.sh secondary <node_ip> <start_kubernetes>\n\t./start.sh primary <node_ip> <num_nodes> <start_kubernetes> <deploy_openwhisk> <invoker_count> <invoker_engine> <scheduler_enabled>'
-NUM_PRIMARY_ARGS=8
+USAGE=$'Usage:\n\t./start.sh secondary <node_ip> <start_kubernetes>\n\t./start.sh primary <node_ip> <num_nodes> <start_kubernetes> <deploy_openwhisk> <invoker_count> <invoker_engine> <scheduler_enabled> <ow_ver>'
+NUM_PRIMARY_ARGS=9
 PROFILE_GROUP="profileuser"
 
 configure_docker_storage() {
@@ -38,6 +38,26 @@ disable_swap() {
         exit -1
     fi
     sudo sed -i.bak 's/UUID=.*swap/# &/' /etc/fstab
+}
+
+create_ow_images() {
+    cd $INSTALL_DIR/openwhisk
+    
+    # Build images with prediction
+    git checkout msft-predict
+    sudo bin/wskdev controller -b
+    sudo docker tag whisk/controller whisk/controller:predict
+    sudo bin/wskdev invoker -b
+    sudo docker tag whisk/invoker whisk/invoker:predict
+    printf "%s: %s\n" "$(date +"%T.%N")" "Created openwhisk docker images for msft-predict branch!"
+    
+    # Build images with base openwhisk
+    git checkout freshen-base
+    sudo bin/wskdev controller -b
+    sudo docker tag whisk/controller whisk/controller:base
+    sudo bin/wskdev invoker -b
+    sudo docker tag whisk/invoker whisk/invoker:base
+    printf "%s: %s\n" "$(date +"%T.%N")" "Created openwhisk docker images for freshen-base branch!"
 }
 
 setup_secondary() {
@@ -164,7 +184,7 @@ add_cluster_nodes() {
 }
 
 prepare_for_openwhisk() {
-    # Args: 1 = IP, 2 = num nodes, 3 = num invokers, 4 = invoker engine, 5 = scheduler enabled
+    # Args: 1 = IP, 2 = num nodes, 3 = num invokers, 4 = invoker engine, 5 = scheduler enabled, 6 = OW version
 
     # Use latest version of openwhisk-deploy-kube
     pushd $INSTALL_DIR/openwhisk-deploy-kube
@@ -299,6 +319,10 @@ sudo chmod -R g+rw $INSTALL_DIR
 # Use second argument (node IP) to replace filler in kubeadm configuration
 sudo sed -i.bak "s/REPLACE_ME_WITH_IP/$2/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
+# Create images needed to deploy openwhisk
+# Do this all at the beginning so it doesn't muck with cluster creation timing
+create_ow_images
+
 # At this point, a secondary node is fully configured until it is time for the node to join the cluster.
 if [ $1 == $SECONDARY_ARG ] ; then
 
@@ -342,8 +366,8 @@ if [ "$5" = "False" ]; then
     exit 0
 fi
 
-# Prepare cluster to deploy OpenWhisk: takes IP, num nodes, invoker num, invoker engine, and scheduler enabled
-prepare_for_openwhisk $2 $3 $6 $7 $8
+# Prepare cluster to deploy OpenWhisk: takes IP, num nodes, invoker num, invoker engine, scheduler enabled, and OW 'version'
+prepare_for_openwhisk $2 $3 $6 $7 $8 $9
 
 # Deploy OpenWhisk via Helm
 # Takes cluster IP
