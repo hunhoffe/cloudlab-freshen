@@ -89,5 +89,5 @@ git checkout 8a7bb7c278a0568d17457548a820bba6cb60f795
 cd $INSTALL_DIR
 git clone git@github.com:hunhoffe/openwhisk-freshen.git openwhisk
 cd openwhisk
-git checkout --track msft-predict
-git checkout --track freshen-base
+git checkout --track origin/msft-predict
+git checkout --track origin/freshen-base
