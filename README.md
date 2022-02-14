@@ -1,4 +1,4 @@
-# CloudLab profile for deploying OpenWhisk via Kubernetes
+# CloudLab profile for deploying OpenWhisk via Kubernetes for the Freshen research project.
 
 General information for what on CloudLab profiles created via GitHub repo can be found in the example repo [here](https://github.com/emulab/my-profile) or in the CloudLab [manual](https://docs.cloudlab.us/cloudlab-manual.html)
 
