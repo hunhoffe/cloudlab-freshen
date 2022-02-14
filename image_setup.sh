@@ -1,6 +1,13 @@
 #!/bin/bash
 set -x
 
+if ssh -o "StrictHostKeyChecking no" -T git@github.com 2>&1 | grep -q "You've successfully authenticated"; then
+  echo "Verified SSH access to git."
+else
+  echo "ERROR: Please initialized your github ssh key before proceeding."
+  exit -1
+fi
+
 # Unlike home directories, this directory will be included in the image
 OW_USER_GROUP=owuser
 INSTALL_DIR=/home/cloudlab-openwhisk
@@ -74,4 +81,12 @@ sudo chgrp -R $OW_USER_GROUP $INSTALL_DIR
 sudo chmod -R o+rw $INSTALL_DIR
 
 # Download openwhisk-deploy-kube repo - customized to this deployment
-git clone https://github.com/apache/openwhisk-deploy-kube $INSTALL_DIR/openwhisk-deploy-kube
+cd $INSTALL_DIR
+git clone https://github.com/apache/openwhisk-deploy-kube openwhisk-deploy-kube
+cd openwhisk-deploy-kube
+git checkout 8a7bb7c278a0568d17457548a820bba6cb60f795
+
+cd $INSTALL_DIR
+git clone git@github.com:hunhoffe/openwhisk-freshen.git openwhisk
+git checkout --track msft-predict
+git checkout --track freshen-base
