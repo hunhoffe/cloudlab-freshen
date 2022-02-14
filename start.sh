@@ -237,7 +237,7 @@ prepare_for_openwhisk() {
     
     # Use correct version of openwhisk-deploy-kube
     cd $INSTALL_DIR/openwhisk-deploy-kube
-    git checkout 8a7bb7c278a0568d17457548a820bba6cb60f795
+    git checkout 688475483935c3a6db28127df1dff2bd735dfc25
 }
 
 deploy_openwhisk() {
